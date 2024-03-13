@@ -10,6 +10,8 @@ function Form() {
     const formDataU = useRef(null);
     const [resultado, setResultado] = useState("");
     const [qr, setQr] = useState(false);
+    const [atributes, setAtributes] = useState("")
+
     const recaptcha = useRef();
 
     function handleSubmit(event) {
@@ -18,7 +20,7 @@ function Form() {
         if (recaptcha.current.getValue()) {
             recaptcha.current.hidden = true
             recaptcha.current.reset()
-            
+
             const formData = new FormData(formDataU.current);
             const persona = curp.getPersona();
             persona.nombre = formData.get('nombre');
@@ -27,6 +29,8 @@ function Form() {
             persona.fechaNacimiento = moment(formData.get('fechaNacimiento')).format('DD-MM-YYYY');
             persona.genero = formData.get('sexo');
             persona.estado = formData.get('estado');
+
+            const attributesString = `Nombre: ${persona.nombre}, \nApellidoPaterno: ${persona.apellidoPaterno}, \nApellidoMaterno: ${persona.apellidoMaterno}, \nFechaNacimiento: ${persona.fechaNacimiento}, \nSexo: ${persona.genero}, \nEstado: ${persona.estado}`
 
             if (persona.nombre === '' || persona.apellidoPaterno === '' || persona.apellidoMaterno === '' || persona.fechaNacimiento === '' || persona.sexo === '' || persona.estado === '') {
                 Swal.fire({
@@ -45,8 +49,10 @@ function Form() {
                     text: "CURP generada correctamente",
                 });
                 const curpGeneradaString = curpGenerada.toString();
-                setResultado("La CURP generada es: " + curpGeneradaString);
-                setQr(true);
+                const atributes = attributesString.toString();
+                setResultado("La CURP generada es: " + curpGeneradaString + "\n");
+                setAtributes("\nDatos de la persona:\n" + atributes)
+                setQr(true)
             } else {
                 Swal.fire({
                     icon: "error",
@@ -69,10 +75,10 @@ function Form() {
             <form id="curpForm" ref={formDataU}>
                 <div className='container-form'>
                     <div className='title-form'>
-                        <h1>Generador de CURP</h1>
+                        <h1 className='title'>GENERA TU CURP AQUI</h1>
                     </div>
                     <div className='Container_input'>
-                        <label htmlFor="nombre">Nombre:</label>
+                        <label htmlFor="nombre">Nombre(s):</label>
                         <input type="text" id="nombre" required name='nombre' placeholder='Ingrese su nombre' />
                         <label htmlFor="apellidoMaterno">Apellido Materno:</label>
                         <input type="text" id="apellidoMaterno" required name='apellidoMaterno' placeholder='Ingrese su apellido materno' />
@@ -97,15 +103,22 @@ function Form() {
                         </select>
                     </div>
                     <div className='container-button-verfi'>
-                        <button type="submit" onClick={handleSubmit}>Generar</button>
+                        <button type="submit" className='button' onClick={handleSubmit}>Generar</button>
                         <ReCAPTCHA className='captcha' ref={recaptcha} sitekey={'6Le5VZIpAAAAANhhPcuwfcyQV6x428ydeRK6WTGH'} />
                     </div>
                 </div>
             </form>
-            <div id="resultado">{resultado}</div>
-            {qr && (
-                <QRCode value={resultado} display={'block'} />
-            )}
+            <div className='resultado'>
+                <h1 className='title-resultado'>Resultados</h1>
+                <div>
+                    {resultado}
+                </div>
+                <div>
+                    {qr && (
+                        <QRCode value={(resultado + atributes)} display={'block'} />
+                    )}
+                </div>
+            </div>
         </div>
     );
 }
