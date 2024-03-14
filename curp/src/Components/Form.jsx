@@ -5,7 +5,7 @@ import QRCode from 'react-qr-code';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 import '../assets/Styles/Styles.css';
-
+const apikey = import.meta.env.VITE_API_KEY
 function Form() {
     const formDataU = useRef(null);
     const [resultado, setResultado] = useState("");
@@ -19,7 +19,7 @@ function Form() {
 
         if (recaptcha.current.getValue()) {
             recaptcha.current.hidden = true
-            recaptcha.current.reset()
+            recaptcha.current.reset();
 
             const formData = new FormData(formDataU.current);
             const persona = curp.getPersona();
@@ -53,6 +53,7 @@ function Form() {
                 setResultado("La CURP generada es: " + curpGeneradaString + "\n");
                 setAtributes("\nDatos de la persona:\n" + atributes)
                 setQr(true)
+                formDataU.current.reset();
             } else {
                 Swal.fire({
                     icon: "error",
@@ -104,7 +105,7 @@ function Form() {
                     </div>
                     <div className='container-button-verfi'>
                         <button type="submit" className='button' onClick={handleSubmit}>Generar</button>
-                        <ReCAPTCHA className='captcha' ref={recaptcha} sitekey={'6Le5VZIpAAAAANhhPcuwfcyQV6x428ydeRK6WTGH'} />
+                        <ReCAPTCHA className='captcha' ref={recaptcha} sitekey={apikey} />
                     </div>
                 </div>
             </form>
