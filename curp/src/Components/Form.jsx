@@ -30,7 +30,7 @@ function Form() {
             persona.genero = formData.get('sexo');
             persona.estado = formData.get('estado');
 
-            const attributesString = `Nombre: ${persona.nombre}, \nApellidoPaterno: ${persona.apellidoPaterno}, \nApellidoMaterno: ${persona.apellidoMaterno}, \nFechaNacimiento: ${persona.fechaNacimiento}, \nSexo: ${persona.genero}, \nEstado: ${persona.estado}`
+            const datos = `Nombre: ${persona.nombre}, \nApellidoPaterno: ${persona.apellidoPaterno}, \nApellidoMaterno: ${persona.apellidoMaterno}, \nFechaNacimiento: ${persona.fechaNacimiento}, \nSexo: ${persona.genero}, \nEstado: ${persona.estado}`
 
             if (persona.nombre === '' || persona.apellidoPaterno === '' || persona.apellidoMaterno === '' || persona.fechaNacimiento === '' || persona.sexo === '' || persona.estado === '') {
                 Swal.fire({
@@ -49,7 +49,7 @@ function Form() {
                     text: "CURP generada correctamente",
                 });
                 const curpGeneradaString = curpGenerada.toString();
-                const atributes = attributesString.toString();
+                const atributes = datos.toString();
                 setResultado("La CURP generada es: " + curpGeneradaString + "\n");
                 setAtributes("\nDatos de la persona:\n" + atributes)
                 setQr(true)
