@@ -51,6 +51,7 @@ select {
 select:focus {
     outline: none;
     border: 2px solid #007bff;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.375);
 }
 
 input {
@@ -59,6 +60,12 @@ input {
     margin-bottom: 15px;
     border-radius: 5px;
     border: 1px solid #ccc;
+}
+
+input:focus {
+    outline: none;
+    border: 2px solid #007bff;
+   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.375);
 }
 
 .button {
@@ -115,7 +122,3 @@ input {
     color: #374151;
 }
 
-input:focus {
-    outline: none;
-    border: 2px solid #007bff;
-}
