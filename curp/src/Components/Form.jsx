@@ -130,7 +130,7 @@ function Form() {
                 </div>
             </form>
             <div className='resultado'>
-                <h1 className='title-resultado'>Resultados</h1>
+                <h1 className='title-resultado'>Resultados</h1>     
                 <div>
                     {resultado}
                 </div>

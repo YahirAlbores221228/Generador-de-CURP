@@ -2,10 +2,11 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-    background-image: url("../Img/Background2.jpg");
+    font-family: "Montserrat", sans-serif;
+    background-image: url("../Img/Background3.jpg");
     background-size: cover;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 .container {
@@ -38,7 +39,8 @@ label {
     display: block;
     margin-bottom: 12px;
     color: #525558;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 select {
@@ -121,5 +123,6 @@ input:focus {
 }
 
 .title-resultado {
+    font-size: 32px;
     color: #374151;
 }
