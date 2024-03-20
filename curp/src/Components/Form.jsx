@@ -8,15 +8,25 @@ import '../assets/Styles/Styles.css';
 const apikey = import.meta.env.VITE_API_KEY
 function Form() {
     const formDataU = useRef(null);
-    const [resultado, setResultado] = useState("");
-    const [qr, setQr] = useState(false);
-    const [atributes, setAtributes] = useState("")
-
     const recaptcha = useRef();
+    const [resultado, setResultado] = useState("");
+    const [atributes, setAtributes] = useState("")
+    const [qr, setQr] = useState(false);
 
+    const validateDate = (e) => {
+        const date = new Date(e.target.value);
+        const today = new Date();
+        if (date > today) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "La fecha no puede ser mayor a la actual"
+            });
+            e.target.value = '';
+        }
+    }
     function handleSubmit(event) {
         event.preventDefault();
-
         if (recaptcha.current.getValue()) {
             recaptcha.current.hidden = true
             recaptcha.current.reset();
@@ -51,7 +61,6 @@ function Form() {
             }
 
             const curpGenerada = curp.generar(persona);
-            
             if (persona.estado === 'CS') {
                 Swal.fire({
                     icon: "success",
@@ -70,7 +79,7 @@ function Form() {
                     title: "Error",
                     text: "Por lo pronto solo generamos CURP del estado de chiapas",
                 });
-            }   
+            }
         } else {
             Swal.fire({
                 icon: "error",
@@ -78,6 +87,8 @@ function Form() {
                 text: "Resuelva el RECAPTCHA",
             });
         }
+
+
     }
 
     return (
@@ -93,7 +104,7 @@ function Form() {
                         <label htmlFor="apellidoMaterno">Apellido Materno:</label>
                         <input type="text" id="apellidoMaterno" required name='apellidoMaterno' placeholder='Ingrese su apellido materno' />
                         <label htmlFor="fechaNacimiento">Fecha de Nacimiento:</label>
-                        <input type="date" id="fechaNacimiento" required name='fechaNacimiento' />
+                        <input type="date" id="fechaNacimiento" onChange={validateDate} required name='fechaNacimiento' />
                     </div>
                     <div className='Container_input'>
                         <label htmlFor="apellidoPaterno"> Apellido Paterno:</label>

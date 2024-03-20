@@ -26,6 +26,7 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.418);
     padding: 20px;
     gap: 10px;
+    border-radius: 12px;
 }
 
 .container-button-verfi {
@@ -116,6 +117,7 @@ input:focus {
     background-color: #ffffff;
     gap: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.418);
+    border-radius: 12px;
 }
 
 .title-resultado {
