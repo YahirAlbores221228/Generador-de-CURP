@@ -16,17 +16,18 @@ function Form() {
     const validateDate = (e) => {
         const date = new Date(e.target.value);
         const today = new Date();
-        if (date > today) {
+        if (date >= today) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "La fecha no puede ser mayor a la actual"
+                text: "año no recodicido",
             });
-            e.target.value = '';
         }
     }
+
     function handleSubmit(event) {
         event.preventDefault();
+        
         if (recaptcha.current.getValue()) {
             recaptcha.current.hidden = true
             recaptcha.current.reset();
@@ -40,6 +41,7 @@ function Form() {
             persona.genero = formData.get('sexo');
             persona.estado = formData.get('estado');
 
+            const year = moment(persona.fechaNacimiento, 'DD-MM-YYYY').year();
             const datos = `Nombre: ${persona.nombre}, \nApellidoPaterno: ${persona.apellidoPaterno}, \nApellidoMaterno: ${persona.apellidoMaterno}, \nFechaNacimiento: ${persona.fechaNacimiento}, \nSexo: ${persona.genero}, \nEstado: ${persona.estado}`
             const expresiones = /^[a-zA-Z\s]+$/;
             if (persona.nombre === '' || persona.apellidoPaterno === '' || persona.apellidoMaterno === '' || persona.fechaNacimiento === '' || persona.sexo === '' || persona.estado === '') {
@@ -58,6 +60,13 @@ function Form() {
                 setQr(false)
                 setResultado("")
                 return
+            } else if (year < 1900) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "El año de nacimiento no puede ser menor que 1900",
+                });
+                return;
             }
 
             const curpGenerada = curp.generar(persona);
@@ -80,6 +89,7 @@ function Form() {
                     text: "Por lo pronto solo generamos CURP del estado de chiapas",
                 });
             }
+            
         } else {
             Swal.fire({
                 icon: "error",
@@ -130,7 +140,7 @@ function Form() {
                 </div>
             </form>
             <div className='resultado'>
-                <h1 className='title-resultado'>Resultados</h1>     
+                <h1 className='title-resultado'>Resultados</h1>
                 <div>
                     {resultado}
                 </div>
