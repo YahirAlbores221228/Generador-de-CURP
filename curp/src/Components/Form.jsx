@@ -31,17 +31,27 @@ function Form() {
             persona.estado = formData.get('estado');
 
             const datos = `Nombre: ${persona.nombre}, \nApellidoPaterno: ${persona.apellidoPaterno}, \nApellidoMaterno: ${persona.apellidoMaterno}, \nFechaNacimiento: ${persona.fechaNacimiento}, \nSexo: ${persona.genero}, \nEstado: ${persona.estado}`
-
+            const expresiones = /^[a-zA-Z\s]+$/;
             if (persona.nombre === '' || persona.apellidoPaterno === '' || persona.apellidoMaterno === '' || persona.fechaNacimiento === '' || persona.sexo === '' || persona.estado === '') {
                 Swal.fire({
                     icon: "error",
                     title: "Error",
                     text: "Todos los campos son obligatorios",
                 });
+                return
+            } else if (!expresiones.test(persona.nombre) || !expresiones.test(persona.apellidoPaterno) || !expresiones.test(persona.apellidoMaterno)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Verifique de nuevo, hay caracteres no validos"
+                });
+                setQr(false)
+                setResultado("")
+                return
             }
 
             const curpGenerada = curp.generar(persona);
-
+            
             if (persona.estado === 'CS') {
                 Swal.fire({
                     icon: "success",
@@ -60,8 +70,7 @@ function Form() {
                     title: "Error",
                     text: "Por lo pronto solo generamos CURP del estado de chiapas",
                 });
-            }
-
+            }   
         } else {
             Swal.fire({
                 icon: "error",
