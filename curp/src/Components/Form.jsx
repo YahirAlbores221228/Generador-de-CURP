@@ -6,100 +6,113 @@ import moment from 'moment';
 import Swal from 'sweetalert2';
 import '../assets/Styles/Styles.css';
 const apikey = import.meta.env.VITE_API_KEY
+
 function Form() {
     const formDataU = useRef(null);
     const recaptcha = useRef();
-    const [resultado, setResultado] = useState("");
-    const [atributes, setAtributes] = useState("")
+    const [result, setResult] = useState("");
+    const [attributes, setAttributes] = useState("")
     const [qr, setQr] = useState(false);
 
     const validateDate = (e) => {
         const date = new Date(e.target.value);
         const today = new Date();
         if (date >= today) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "año no recodicido",
-            });
+            viewError("Fecha invalida")
         }
     }
 
-    function handleSubmit(event) {
-        event.preventDefault();
-        
+    function handleSubmit(e) {
+        e.preventDefault();
+
         if (recaptcha.current.getValue()) {
-            recaptcha.current.hidden = true
-            recaptcha.current.reset();
-
-            const formData = new FormData(formDataU.current);
-            const persona = curp.getPersona();
-            persona.nombre = formData.get('nombre');
-            persona.apellidoPaterno = formData.get('apellidoPaterno')
-            persona.apellidoMaterno = formData.get('apellidoMaterno');
-            persona.fechaNacimiento = moment(formData.get('fechaNacimiento')).format('DD-MM-YYYY');
-            persona.genero = formData.get('sexo');
-            persona.estado = formData.get('estado');
-
-            const year = moment(persona.fechaNacimiento, 'DD-MM-YYYY').year();
-            const datos = `Nombre: ${persona.nombre}, \nApellidoPaterno: ${persona.apellidoPaterno}, \nApellidoMaterno: ${persona.apellidoMaterno}, \nFechaNacimiento: ${persona.fechaNacimiento}, \nSexo: ${persona.genero}, \nEstado: ${persona.estado}`
-            const expresiones = /^[a-zA-Z\s]+$/;
-            if (persona.nombre === '' || persona.apellidoPaterno === '' || persona.apellidoMaterno === '' || persona.fechaNacimiento === '' || persona.sexo === '' || persona.estado === '') {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Todos los campos son obligatorios",
-                });
-                return
-            } else if (!expresiones.test(persona.nombre) || !expresiones.test(persona.apellidoPaterno) || !expresiones.test(persona.apellidoMaterno)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Verifique de nuevo, hay caracteres no validos"
-                });
-                setQr(false)
-                setResultado("")
-                return
-            } else if (year < 1900) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "El año de nacimiento no puede ser menor que 1900",
-                });
-                return;
-            }
-
-            const curpGenerada = curp.generar(persona);
-            if (persona.estado === 'CS') {
-                Swal.fire({
-                    icon: "success",
-                    title: "Exitoso",
-                    text: "CURP generada correctamente",
-                });
-                const curpGeneradaString = curpGenerada.toString();
-                const atributes = datos.toString();
-                setResultado("La CURP generada es: " + curpGeneradaString + "\n");
-                setAtributes("\nDatos de la persona:\n" + atributes)
-                setQr(true)
-                formDataU.current.reset();
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Por lo pronto solo generamos CURP del estado de chiapas",
-                });
-            }
-            
+            handleValidRecaptcha();
         } else {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Resuelva el RECAPTCHA",
-            });
+            handleInvalidRecaptcha();
         }
-
-
     }
+
+    function handleValidRecaptcha() {
+        recaptcha.current.hidden = true;
+        recaptcha.current.reset();
+
+        const formData = new FormData(formDataU.current);
+        const person = getDatosPersona(formData);
+
+        if (dataPersonValid(person)) {
+            generateCurp(person);
+        }
+    }
+
+    function getDatosPersona(formData) {
+        const person = curp.getPersona();
+        person.nombre = formData.get('nombre');
+        person.apellidoPaterno = formData.get('apellidoPaterno');
+        person.apellidoMaterno = formData.get('apellidoMaterno');
+        person.fechaNacimiento = moment(formData.get('fechaNacimiento')).format('DD-MM-YYYY');
+        person.genero = formData.get('sexo');
+        person.estado = formData.get('estado');
+        return person;
+    }
+
+    function dataPersonValid(person) {
+        const expressions = /^[a-zA-Z\s]+$/;
+        const year = moment(person.fechaNacimiento, 'DD-MM-YYYY').year();
+
+        if (person.nombre === '' || person.apellidoPaterno === '' || person.apellidoMaterno === '' || person.fechaNacimiento === '' || person.sexo === '' || person.estado === '') {
+            viewError("Todos los campos son obligatorios");
+            return false;
+        } else if (!expressions.test(person.nombre) || !expressions.test(person.apellidoPaterno) || !expressions.test(person.apellidoMaterno)) {
+            viewError("Verifique de nuevo, hay caracteres no validos");
+            setQr(false);
+            setResult("");
+            return false;
+        } else if (year < 1900) {
+            viewError("El año de nacimiento no puede ser menor que 1900");
+            return false;
+        }
+        return true;
+    }
+
+    function generateCurp(person) {
+        if (person.estado === 'CS') {
+            const curpGenerada = curp.generar(person);
+            viewExit("CURP generada correctamente");
+            const curpGeneratestring = curpGenerada.toString();
+            const attributes = datosToString(person);
+            setResult("La CURP generada es: " + curpGeneratestring + "\n");
+            setAttributes("\nDatos de la persona:\n" + attributes);
+            setQr(true);
+            formDataU.current.reset();
+        } else {
+            viewError("Por lo pronto solo generamos CURP del estado de Chiapas");
+        }
+    }
+
+    function handleInvalidRecaptcha() {
+        viewError("Resuelva el RECAPTCHA");
+    }
+
+    function viewError(mensaje) {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: mensaje,
+        });
+    }
+
+    function viewExit(mensaje) {
+        Swal.fire({
+            icon: "success",
+            title: "Exitoso",
+            text: mensaje,
+        });
+    }
+
+    function datosToString(person) {
+        return `Nombre: ${person.nombre}, \nApellidoPaterno: ${person.apellidoPaterno}, \nApellidoMaterno: ${person.apellidoMaterno}, \nFechaNacimiento: ${person.fechaNacimiento}, \nSexo: ${person.genero}, \nEstado: ${person.estado}`;
+    }
+
 
     return (
         <div className="container">
@@ -142,11 +155,11 @@ function Form() {
             <div className='resultado'>
                 <h1 className='title-resultado'>Resultados</h1>
                 <div>
-                    {resultado}
+                    {result}
                 </div>
                 <div>
                     {qr && (
-                        <QRCode value={(resultado + atributes)} display={'block'} />
+                        <QRCode value={(result + attributes)} display={'block'} />
                     )}
                 </div>
             </div>
