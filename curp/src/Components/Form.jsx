@@ -116,40 +116,46 @@ function Form() {
 
     return (
         <div className="container">
-            <form id="curpForm" ref={formDataU}>
-                <div className='container-form'>
-                    <div className='title-form'>
-                        <h1 className='title'>GENERA TU CURP AQUI</h1>
-                    </div>
-                    <div className='Container_input'>
-                        <label htmlFor="nombre">Nombre(s):</label>
-                        <input type="text" id="nombre" required name='nombre' placeholder='Ingrese su nombre' />
-                        <label htmlFor="apellidoMaterno">Apellido Materno:</label>
-                        <input type="text" id="apellidoMaterno" required name='apellidoMaterno' placeholder='Ingrese su apellido materno' />
-                        <label htmlFor="fechaNacimiento">Fecha de Nacimiento:</label>
-                        <input type="date" id="fechaNacimiento" onChange={validateDate} required name='fechaNacimiento' />
-                    </div>
-                    <div className='Container_input'>
-                        <label htmlFor="apellidoPaterno"> Apellido Paterno:</label>
-                        <input type="text" id="apellidoPaterno" required name='apellidoPaterno' placeholder='Ingrese su apellido paterno' />
-                        <label htmlFor="sexo">Sexo:</label>
-                        <select id="sexo" required name='sexo' >
-                            <option value="">Selecciona el sexo</option>
-                            <option value="H">Hombre</option>
-                            <option value="M">Mujer</option>
-                        </select>
-                        <label htmlFor="estado">Estado de Nacimiento:</label>
-                        <select id="estado" required name='estado'  >
-                            <option value="">Selecciona un estado</option>
-                            <option value="CS">Chiapas</option>
-                            <option value="CP">Campeche</option>
-                            <option value="OX">Oaxaca</option>
-                        </select>
-                    </div>
-                    <div className='container-button-verfi'>
-                        <button type="submit" className='button' onClick={handleSubmit}>Generar</button>
-                        <ReCAPTCHA className='captcha' ref={recaptcha} sitekey={apikey} />
-                    </div>
+            <form id="curpForm" ref={formDataU} className='container-form'>
+                <div className='title-form'>
+                    <h1 className='title'>GENERA TU CURP AQUI</h1>
+                </div>
+                <div>
+                    <label htmlFor="nombre">Nombre(s):</label>
+                    <input type="text" id="nombre" required name='nombre' placeholder='Ingrese su nombre' z />
+                </div>
+                <div>
+                    <label htmlFor="apellidoPaterno"> Apellido Paterno:</label>
+                    <input type="text" id="apellidoPaterno" required name='apellidoPaterno' placeholder='Ingrese su apellido paterno' />
+                </div>
+                <div>
+                    <label htmlFor="apellidoMaterno">Apellido Materno:</label>
+                    <input type="text" id="apellidoMaterno" required name='apellidoMaterno' placeholder='Ingrese su apellido materno' />
+                </div>
+                <div>
+                    <label htmlFor="fechaNacimiento">Fecha de Nacimiento:</label>
+                    <input type="date" id="fechaNacimiento" onChange={validateDate} required name='fechaNacimiento' />
+                </div>
+                <div>
+                    <label htmlFor="sexo">Sexo:</label>
+                    <select id="sexo" required name='sexo' >
+                        <option value="">Selecciona el sexo</option>
+                        <option value="H">Hombre</option>
+                        <option value="M">Mujer</option>
+                    </select>
+                </div>
+                <div>
+                    <label htmlFor="estado">Estado de Nacimiento:</label>
+                    <select id="estado" required name='estado'  >
+                        <option value="">Selecciona un estado</option>
+                        <option value="CS">Chiapas</option>
+                        <option value="CP">Campeche</option>
+                        <option value="OX">Oaxaca</option>
+                    </select>
+                </div>
+                <div className='container-button-verfi'>
+                    <button type="submit" className='button' onClick={handleSubmit}>Generar</button>
+                    <ReCAPTCHA className='captcha' ref={recaptcha} sitekey={apikey} />
                 </div>
             </form>
             <div className='resultado'>
@@ -163,6 +169,7 @@ function Form() {
                     )}
                 </div>
             </div>
+
         </div>
     );
 }
