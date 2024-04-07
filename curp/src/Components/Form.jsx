@@ -122,15 +122,15 @@ function Form() {
                 </div>
                 <div>
                     <label htmlFor="nombre">Nombre(s):</label>
-                    <input type="text" id="nombre" required name='nombre' placeholder='Ingrese su nombre' z />
+                    <input type="text" id="nombre" required name='nombre' placeholder='Ingrese su nombre' maxLength={50}/>
                 </div>
                 <div>
                     <label htmlFor="apellidoPaterno"> Apellido Paterno:</label>
-                    <input type="text" id="apellidoPaterno" required name='apellidoPaterno' placeholder='Ingrese su apellido paterno' />
+                    <input type="text" id="apellidoPaterno" required name='apellidoPaterno' placeholder='Ingrese su apellido paterno' maxLength={50} />
                 </div>
                 <div>
                     <label htmlFor="apellidoMaterno">Apellido Materno:</label>
-                    <input type="text" id="apellidoMaterno" required name='apellidoMaterno' placeholder='Ingrese su apellido materno' />
+                    <input type="text" id="apellidoMaterno" required name='apellidoMaterno' placeholder='Ingrese su apellido materno' maxLength={50} />
                 </div>
                 <div>
                     <label htmlFor="fechaNacimiento">Fecha de Nacimiento:</label>
@@ -169,7 +169,6 @@ function Form() {
                     )}
                 </div>
             </div>
-
         </div>
     );
 }

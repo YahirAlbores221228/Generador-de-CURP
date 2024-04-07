@@ -55,6 +55,7 @@ input {
     margin-bottom: 10px;
     border-radius: 20px;
     border: 1px solid #ccc;
+    text-transform: capitalize;
 }
 
 input:focus,
@@ -62,6 +63,15 @@ select:focus {
     outline: none;
     border: 1px solid #007bff;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.375);
+}
+
+input::placeholder {
+    text-transform: none;
+}
+
+/*hacemos esto para indicar que el input tiene tipo date seleccionamos su tipo y pasamos a que normal el texto*/
+input[type="date"] {
+    text-transform: none;
 }
 
 .button {
@@ -88,7 +98,8 @@ select:focus {
     width: 100%;
 }
 
-.title, .title-resultado {
+.title,
+.title-resultado {
     text-align: center;
     color: #374151;
     font-size: 28px;
