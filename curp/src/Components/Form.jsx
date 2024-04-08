@@ -112,7 +112,12 @@ function Form() {
     function datosToString(person) {
         return `Nombre: ${person.nombre}, \nApellidoPaterno: ${person.apellidoPaterno}, \nApellidoMaterno: ${person.apellidoMaterno}, \nFechaNacimiento: ${person.fechaNacimiento}, \nSexo: ${person.genero}, \nEstado: ${person.estado}`;
     }
-
+    function handleKeyPress(e) {
+        const keyCode = e.keyCode || e.which;
+        const keyValue = String.fromCharCode(keyCode);
+        if (/\d/.test(keyValue))
+            e.preventDefault();
+    }
 
     return (
         <div className="container">
@@ -122,15 +127,15 @@ function Form() {
                 </div>
                 <div>
                     <label htmlFor="nombre">Nombre(s):</label>
-                    <input type="text" id="nombre" required name='nombre' placeholder='Ingrese su nombre' maxLength={50}/>
+                    <input type="text" id="nombre" required name='nombre' placeholder='Ingrese su nombre' maxLength={50} onKeyDown={handleKeyPress} />
                 </div>
                 <div>
                     <label htmlFor="apellidoPaterno"> Apellido Paterno:</label>
-                    <input type="text" id="apellidoPaterno" required name='apellidoPaterno' placeholder='Ingrese su apellido paterno' maxLength={50} />
+                    <input type="text" id="apellidoPaterno" required name='apellidoPaterno' placeholder='Ingrese su apellido paterno' maxLength={50} onKeyDown={handleKeyPress} />
                 </div>
                 <div>
                     <label htmlFor="apellidoMaterno">Apellido Materno:</label>
-                    <input type="text" id="apellidoMaterno" required name='apellidoMaterno' placeholder='Ingrese su apellido materno' maxLength={50} />
+                    <input type="text" id="apellidoMaterno" required name='apellidoMaterno' placeholder='Ingrese su apellido materno' maxLength={50} onKeyDown={handleKeyPress} />
                 </div>
                 <div>
                     <label htmlFor="fechaNacimiento">Fecha de Nacimiento:</label>
